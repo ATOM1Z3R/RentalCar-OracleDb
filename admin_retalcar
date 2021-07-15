@@ -1,0 +1,862 @@
+--------------------------------------------------------
+--  File created - pi¹tek-lipca-09-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence S_PK_GENERATOR
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "ADMIN_RENTALCAR"."S_PK_GENERATOR"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 301 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Table ADMIN_LOGS
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."ADMIN_LOGS" 
+   (	"LOG_ID" NUMBER, 
+	"ACTION" VARCHAR2(100 BYTE), 
+	"OBJECT_NAME" VARCHAR2(150 BYTE), 
+	"USERNAME" VARCHAR2(100 BYTE) DEFAULT user, 
+	"DATETIME" DATE DEFAULT sysdate, 
+	"NUMBER_OF_RECORDS" NUMBER
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table BASE_PRICES
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."BASE_PRICES" 
+   (	"BASE_PRICE_ID" NUMBER, 
+	"NUMBER_OF_DAYS" NUMBER, 
+	"PRICE" NUMBER
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table CLIENTS
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."CLIENTS" 
+   (	"CLIENT_ID" NUMBER, 
+	"FIRST_NAME" VARCHAR2(150 BYTE), 
+	"LAST_NAME" VARCHAR2(150 BYTE), 
+	"PHONE" NUMBER, 
+	"EMAIL" VARCHAR2(350 BYTE), 
+	"CITY" VARCHAR2(100 BYTE), 
+	"ADDRESS" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table LOCATIONS
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."LOCATIONS" 
+   (	"LOCATION_ID" NUMBER, 
+	"CITY" VARCHAR2(100 BYTE), 
+	"ADDRESS" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table RESERVATIONS
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."RESERVATIONS" 
+   (	"RESERVATION_ID" NUMBER, 
+	"CLIENT_ID" NUMBER, 
+	"VECHICLE_ID" NUMBER, 
+	"BASE_PRICE_ID" NUMBER, 
+	"RESERVATION_DATE" DATE, 
+	"ACTUAL_RETRIVE_DATE" DATE DEFAULT null, 
+	"EXPECTED_RETRIVE_DATE" DATE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table VECHICLES
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN_RENTALCAR"."VECHICLES" 
+   (	"VECHICLE_ID" NUMBER, 
+	"MANUFACTURER" VARCHAR2(150 BYTE), 
+	"MODEL" VARCHAR2(150 BYTE), 
+	"COLOR" VARCHAR2(100 BYTE), 
+	"ENGINE" VARCHAR2(150 BYTE), 
+	"POWER_KV" NUMBER, 
+	"PRICE_MULTIPLIER" NUMBER, 
+	"LOCATION_ID" NUMBER, 
+	"AVAILABILITY" NUMBER(*,0) DEFAULT 1
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for View V_ADD_VECHICLES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_ADD_VECHICLES" ("VECHICLE_ID", "MANUFACTURER", "MODEL", "COLOR", "ENGINE", "POWER_KV", "PRICE_MULTIPLIER", "LOCATION_ID", "AVAILABILITY") AS 
+  select vechicle_id, manufacturer, model, color, engine, 
+       power_kv, price_multiplier, location_id, availability
+from vechicles
+;
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_ADD_VECHICLES" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT INSERT ON "ADMIN_RENTALCAR"."V_ADD_VECHICLES" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT DELETE ON "ADMIN_RENTALCAR"."V_ADD_VECHICLES" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT UPDATE ON "ADMIN_RENTALCAR"."V_ADD_VECHICLES" TO "R_RENTALCAR_SUPPLIERS";
+--------------------------------------------------------
+--  DDL for View V_CLIENTS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_CLIENTS" ("CLIENT_ID", "FIRST_NAME", "LAST_NAME", "PHONE", "EMAIL", "CITY", "ADDRESS") AS 
+  select client_id, first_name, last_name, phone, email, city, address
+    from clients
+;
+  GRANT INSERT ON "ADMIN_RENTALCAR"."V_CLIENTS" TO "R_RENTALCAR_WORKERS";
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_CLIENTS" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for View V_READ_AVAILABLE_VECHICLES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_READ_AVAILABLE_VECHICLES" ("VECHICLE_ID", "MANUFACTURER", "MODEL", "COLOR", "ENGINE", "POWER_KV", "PRICE_MULTIPLIER", "LOCATION") AS 
+  select vechicle_id, manufacturer, model, color, engine, 
+       power_kv, price_multiplier, l.city||' '||l.address as "LOCATION"
+    from vechicles v, locations l 
+    where v.location_id = l.location_id
+    and v.availability = 1 with check option
+;
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_READ_AVAILABLE_VECHICLES" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for View V_READ_RESERVATIONS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_READ_RESERVATIONS" ("RESERVATION_ID", "CLIENT_ID", "VECHICLE_ID", "BASE_PRICE_ID", "RESERVATION_DATE", "ACTUAL_RETRIVE_DATE", "EXPECTED_RETRIVE_DATE") AS 
+  select "RESERVATION_ID","CLIENT_ID","VECHICLE_ID",
+       "BASE_PRICE_ID",to_char(RESERVATION_DATE, 'dd/mm/yyyy') "RESERVATION_DATE",
+       to_char(ACTUAL_RETRIVE_DATE, 'dd/mm/yyyy') "ACTUAL_RETRIVE_DATE",
+       to_char(EXPECTED_RETRIVE_DATE, 'dd/mm/yyyy') "EXPECTED_RETRIVE_DATE" 
+from reservations WITH READ ONLY
+;
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_READ_RESERVATIONS" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for View V_READ_VECHICLES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_READ_VECHICLES" ("VECHICLE_ID", "MANUFACTURER", "MODEL", "COLOR", "ENGINE", "POWER_KV", "PRICE_MULTIPLIER", "AVAILABILITY", "location") AS 
+  select v.vechicle_id, v.manufacturer, v.model, v.color, v.engine, 
+       v.power_kv, v.price_multiplier, v.availability, l.city || ' ' || l.address as "location"
+from vechicles v, locations l
+where v.location_id = l.location_id
+with read only
+;
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_READ_VECHICLES" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for View V_SHOW_ADMIN_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_SHOW_ADMIN_LOGS" ("LOG_ID", "ACTION", "OBJECT_NAME", "USERNAME", "DATE", "NUMBER_OF_RECORDS") AS 
+  select log_id, action, object_name, username, 
+to_date(datetime, 'dd/mm/yyyy hh24:mi:ss') "DATE", 
+number_of_records
+from admin_logs
+;
+--------------------------------------------------------
+--  DDL for View V_SHOW_LOCATIONS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" ("LOCATION_ID", "CITY", "ADDRESS") AS 
+  select "LOCATION_ID","CITY","ADDRESS" from locations
+;
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" TO "R_RENTALCAR_WORKERS";
+  GRANT SELECT ON "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT INSERT ON "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT UPDATE ON "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" TO "R_RENTALCAR_SUPPLIERS";
+  GRANT DELETE ON "ADMIN_RENTALCAR"."V_SHOW_LOCATIONS" TO "R_RENTALCAR_SUPPLIERS";
+--------------------------------------------------------
+--  DDL for Materialized View MV_LATE_RESERVATIONS
+--------------------------------------------------------
+
+  CREATE MATERIALIZED VIEW "ADMIN_RENTALCAR"."MV_LATE_RESERVATIONS" ("FIRST_NAME", "LAST_NAME", "PHONE", "EMAIL", "CITY", "ADDRESS", "MANUFACTURER", "MODEL", "EXPECTED_RETRIVE_DATE", "LATE DAYS")
+  SEGMENT CREATION IMMEDIATE
+  ORGANIZATION HEAP PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"   NO INMEMORY 
+  BUILD IMMEDIATE
+  USING INDEX 
+  REFRESH FORCE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT
+  USING ENFORCED CONSTRAINTS DISABLE ON QUERY COMPUTATION DISABLE QUERY REWRITE
+  AS select c.first_name, c.last_name, c.phone, c.email, c.city, c.address,
+       v.manufacturer, v.model,
+       to_char(r.expected_retrive_date, 'dd/mm/yyyy') "EXPECTED_RETRIVE_DATE", 
+       floor(sysdate-r.expected_retrive_date) "LATE DAYS"
+from clients c, vechicles v, reservations r
+where c.client_id = r.client_id
+and v.vechicle_id = r.vechicle_id
+and r.actual_retrive_date is null
+and r.expected_retrive_date<sysdate;
+
+   COMMENT ON MATERIALIZED VIEW "ADMIN_RENTALCAR"."MV_LATE_RESERVATIONS"  IS 'snapshot table for snapshot ADMIN_RENTALCAR.MV_LATE_RESERVATIONS';
+REM INSERTING into ADMIN_RENTALCAR.ADMIN_LOGS
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('231','LOCATIONS','INSERT','SUPPLIER1',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('271','RESERVATIONS','INSERT','WORKER1',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('273','VECHICLES','UPDATE','WORKER1',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('275','RESERVATIONS','UPDATE','WORKER1',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('277','VECHICLES','UPDATE','WORKER1',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('226','LOCATIONS','INSERT','SUPPLIER1',to_date('21/06/03','RR/MM/DD'),'3');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('266','BASE_PRICES','DELETE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'2');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('242','RESERVATIONS','UPDATE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('263','BASE_PRICES','INSERT','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'2');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('282','RESERVATIONS','DELETE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'3');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('285','RESERVATIONS','INSERT','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'2');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('288','RESERVATIONS','INSERT','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'2');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('291','VECHICLES','UPDATE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'2');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('293','VECHICLES','UPDATE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'1');
+Insert into ADMIN_RENTALCAR.ADMIN_LOGS (LOG_ID,ACTION,OBJECT_NAME,USERNAME,DATETIME,NUMBER_OF_RECORDS) values ('295','BASE_PRICES','DELETE','ADMIN_RENTALCAR',to_date('21/06/03','RR/MM/DD'),'1');
+REM INSERTING into ADMIN_RENTALCAR.BASE_PRICES
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.BASE_PRICES (BASE_PRICE_ID,NUMBER_OF_DAYS,PRICE) values ('119','3','100');
+Insert into ADMIN_RENTALCAR.BASE_PRICES (BASE_PRICE_ID,NUMBER_OF_DAYS,PRICE) values ('120','7','210');
+Insert into ADMIN_RENTALCAR.BASE_PRICES (BASE_PRICE_ID,NUMBER_OF_DAYS,PRICE) values ('121','10','300');
+Insert into ADMIN_RENTALCAR.BASE_PRICES (BASE_PRICE_ID,NUMBER_OF_DAYS,PRICE) values ('122','14','420');
+REM INSERTING into ADMIN_RENTALCAR.CLIENTS
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.CLIENTS (CLIENT_ID,FIRST_NAME,LAST_NAME,PHONE,EMAIL,CITY,ADDRESS) values ('113','Janusz','Kalosz','987686786','janusz.kalosz@ert.lp','katowice','zimowa 66');
+Insert into ADMIN_RENTALCAR.CLIENTS (CLIENT_ID,FIRST_NAME,LAST_NAME,PHONE,EMAIL,CITY,ADDRESS) values ('114','Kamil','Czarny','987703786','kamil556@u3.com','katowice','wiosenna 5');
+Insert into ADMIN_RENTALCAR.CLIENTS (CLIENT_ID,FIRST_NAME,LAST_NAME,PHONE,EMAIL,CITY,ADDRESS) values ('115','Andrzej','Kowal','999456853','andrzej.kowal@u3.com','jaworzno','gruntowa 7');
+Insert into ADMIN_RENTALCAR.CLIENTS (CLIENT_ID,FIRST_NAME,LAST_NAME,PHONE,EMAIL,CITY,ADDRESS) values ('116','Zbigniew','Malarz','923488853','malarz.z555@v2.com','chrzanów','liliowa 7');
+REM INSERTING into ADMIN_RENTALCAR.LOCATIONS
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('212','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('213','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('216','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('219','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('222','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('224','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('227','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('228','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('229','tessdt','tests');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('81','katowice','polna 21');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('82','sosnowiec','wiejska 67');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('181','rr','ww');
+Insert into ADMIN_RENTALCAR.LOCATIONS (LOCATION_ID,CITY,ADDRESS) values ('208','rr','ww');
+REM INSERTING into ADMIN_RENTALCAR.RESERVATIONS
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.RESERVATIONS (RESERVATION_ID,CLIENT_ID,VECHICLE_ID,BASE_PRICE_ID,RESERVATION_DATE,ACTUAL_RETRIVE_DATE,EXPECTED_RETRIVE_DATE) values ('283','113','83','119',to_date('21/05/04','RR/MM/DD'),null,to_date('21/05/07','RR/MM/DD'));
+Insert into ADMIN_RENTALCAR.RESERVATIONS (RESERVATION_ID,CLIENT_ID,VECHICLE_ID,BASE_PRICE_ID,RESERVATION_DATE,ACTUAL_RETRIVE_DATE,EXPECTED_RETRIVE_DATE) values ('286','114','86','119',to_date('21/04/04','RR/MM/DD'),to_date('21/04/07','RR/MM/DD'),to_date('21/04/07','RR/MM/DD'));
+Insert into ADMIN_RENTALCAR.RESERVATIONS (RESERVATION_ID,CLIENT_ID,VECHICLE_ID,BASE_PRICE_ID,RESERVATION_DATE,ACTUAL_RETRIVE_DATE,EXPECTED_RETRIVE_DATE) values ('289','116','87','120',to_date('21/05/04','RR/MM/DD'),null,to_date('21/05/18','RR/MM/DD'));
+REM INSERTING into ADMIN_RENTALCAR.VECHICLES
+SET DEFINE OFF;
+Insert into ADMIN_RENTALCAR.VECHICLES (VECHICLE_ID,MANUFACTURER,MODEL,COLOR,ENGINE,POWER_KV,PRICE_MULTIPLIER,LOCATION_ID,AVAILABILITY) values ('83','bugstti','veyron','black','w16','736','100','81','0');
+Insert into ADMIN_RENTALCAR.VECHICLES (VECHICLE_ID,MANUFACTURER,MODEL,COLOR,ENGINE,POWER_KV,PRICE_MULTIPLIER,LOCATION_ID,AVAILABILITY) values ('84','opel','astra','red','1,6 l 16V','74','1','81','1');
+Insert into ADMIN_RENTALCAR.VECHICLES (VECHICLE_ID,MANUFACTURER,MODEL,COLOR,ENGINE,POWER_KV,PRICE_MULTIPLIER,LOCATION_ID,AVAILABILITY) values ('86','porsche','911 turbo s','white','B6 3.5L','200','50','82','1');
+Insert into ADMIN_RENTALCAR.VECHICLES (VECHICLE_ID,MANUFACTURER,MODEL,COLOR,ENGINE,POWER_KV,PRICE_MULTIPLIER,LOCATION_ID,AVAILABILITY) values ('87','mercedes','c63 amg','yellow','V8 6.2L','340','30','82','0');
+--------------------------------------------------------
+--  DDL for Index VECHICLES_AVAILABILITY
+--------------------------------------------------------
+
+  CREATE BITMAP INDEX "ADMIN_RENTALCAR"."VECHICLES_AVAILABILITY" ON "ADMIN_RENTALCAR"."VECHICLES" ("AVAILABILITY") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index VECHICLES_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."VECHICLES_PK" ON "ADMIN_RENTALCAR"."VECHICLES" ("VECHICLE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index I_RESERVATIONS_ACT_RET_DATE
+--------------------------------------------------------
+
+  CREATE INDEX "ADMIN_RENTALCAR"."I_RESERVATIONS_ACT_RET_DATE" ON "ADMIN_RENTALCAR"."RESERVATIONS" ("ACTUAL_RETRIVE_DATE") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index RESERVATIONS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."RESERVATIONS_PK" ON "ADMIN_RENTALCAR"."RESERVATIONS" ("RESERVATION_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index BASE_PRICES_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."BASE_PRICES_PK" ON "ADMIN_RENTALCAR"."BASE_PRICES" ("BASE_PRICE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index CLIENTS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."CLIENTS_PK" ON "ADMIN_RENTALCAR"."CLIENTS" ("CLIENT_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index LOCATIONS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."LOCATIONS_PK" ON "ADMIN_RENTALCAR"."LOCATIONS" ("LOCATION_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index ADMIN_LOGS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "ADMIN_RENTALCAR"."ADMIN_LOGS_PK" ON "ADMIN_RENTALCAR"."ADMIN_LOGS" ("LOG_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger T_ADMIN_LOGS_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_ADMIN_LOGS_PK_INSERT" 
+before insert on admin_logs
+for each row
+declare
+begin
+:new.log_id := S_PK_GENERATOR.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_ADMIN_LOGS_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_BASE_PRICES_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_BASE_PRICES_LOGS" 
+AFTER DELETE OR INSERT OR UPDATE ON BASE_PRICES
+FOR EACH ROW
+DECLARE
+ls_dml_type varchar2(10) default 'INSERT';
+ls_rec_num number default 0;
+BEGIN
+  ls_rec_num := ls_rec_num + 1;
+  if updating then
+    ls_dml_type := 'UPDATE';
+  elsif deleting then
+    ls_dml_type := 'DELETE';
+  end if;
+  p_insert_logs('BASE_PRICES', ls_dml_type, user);
+END;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_BASE_PRICES_LOGS" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_BASE_PRICES_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_BASE_PRICES_PK_INSERT" 
+before insert on base_prices
+for each row
+declare
+begin
+:new.base_price_id := S_PK_GENERATOR.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_BASE_PRICES_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_CLIENTS_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_CLIENTS_LOGS" 
+AFTER DELETE OR INSERT OR UPDATE ON CLIENTS
+FOR EACH ROW
+DECLARE
+ls_dml_type varchar2(10) default 'INSERT';
+ls_rec_num number default 0;
+BEGIN
+  ls_rec_num := ls_rec_num + 1;
+  if updating then
+    ls_dml_type := 'UPDATE';
+  elsif deleting then
+    ls_dml_type := 'DELETE';
+  end if;
+  p_insert_logs('CLIENTS', ls_dml_type, user);
+END;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_CLIENTS_LOGS" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_CLIENTS_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_CLIENTS_PK_INSERT" 
+before insert on clients
+for each row
+declare
+begin
+:new.client_id := S_PK_GENERATOR.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_CLIENTS_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_LOCATIONS_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_LOCATIONS_LOGS" 
+AFTER DELETE OR INSERT OR UPDATE ON LOCATIONS
+FOR EACH ROW
+DECLARE
+ls_dml_type varchar2(10) default 'INSERT';
+ls_rec_num number default 0;
+BEGIN
+  ls_rec_num := ls_rec_num + 1;
+  if updating then
+    ls_dml_type := 'UPDATE';
+  elsif deleting then
+    ls_dml_type := 'DELETE';
+  end if;
+  p_insert_logs('LOCATIONS', ls_dml_type, user);
+END;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_LOCATIONS_LOGS" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_LOCATIONSS_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_LOCATIONSS_PK_INSERT" 
+before insert on locations
+for each row
+declare
+begin
+:new.location_id := S_PK_GENERATOR.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_LOCATIONSS_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_RESERVATIONS_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_RESERVATIONS_LOGS" 
+AFTER DELETE OR INSERT OR UPDATE ON RESERVATIONS
+FOR EACH ROW
+DECLARE
+ls_dml_type varchar2(10) default 'INSERT';
+ls_rec_num number default 0;
+BEGIN
+  ls_rec_num := ls_rec_num + 1;
+  if updating then
+    ls_dml_type := 'UPDATE';
+  elsif deleting then
+    ls_dml_type := 'DELETE';
+  end if;
+  p_insert_logs('RESERVATIONS', ls_dml_type, user);
+END;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_RESERVATIONS_LOGS" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_RESERVATIONS_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_RESERVATIONS_PK_INSERT" 
+before insert on reservations
+for each row
+declare
+begin
+:new.reservation_id := S_PK_GENERATOR.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_RESERVATIONS_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_VECHICLES_LOGS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_VECHICLES_LOGS" 
+AFTER DELETE OR INSERT OR UPDATE ON VECHICLES
+FOR EACH ROW
+DECLARE
+ls_dml_type varchar2(10) default 'INSERT';
+ls_rec_num number default 0;
+BEGIN
+  ls_rec_num := ls_rec_num + 1;
+  if updating then
+    ls_dml_type := 'UPDATE';
+  elsif deleting then
+    ls_dml_type := 'DELETE';
+  end if;
+  p_insert_logs('VECHICLES', ls_dml_type, user);
+END;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_VECHICLES_LOGS" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_VECHICLES_PK_INSERT
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "ADMIN_RENTALCAR"."T_VECHICLES_PK_INSERT" 
+before insert on vechicles
+for each row
+declare
+begin
+:new.vechicle_id := s_pk_generator.nextval;
+end;
+/
+ALTER TRIGGER "ADMIN_RENTALCAR"."T_VECHICLES_PK_INSERT" ENABLE;
+--------------------------------------------------------
+--  DDL for Procedure P_INSERT_LOGS
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_INSERT_LOGS" (pis_action in varchar2, pis_tbl in varchar2, pis_user in varchar2) as
+pragma autonomous_transaction;
+
+ln_rec_num number;
+begin
+    begin
+        select number_of_records into ln_rec_num
+        from admin_logs
+        where object_name = pis_tbl
+        and action = pis_action
+        and username = pis_user
+        and datetime > sysdate - interval '1' minute;
+        exception when no_data_found then 
+            ln_rec_num := 0;
+    end;
+
+if ln_rec_num = 0 then
+    ln_rec_num := 1;
+    insert into admin_logs ( log_id, action, object_name, number_of_records) 
+                    values (S_PK_GENERATOR.nextval, pis_action, pis_tbl, ln_rec_num);
+else 
+    update admin_logs
+       set number_of_records = number_of_records +1
+       where action = pis_action
+       and object_name = pis_tbl
+       and username = pis_user;
+end if;
+commit;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure P_MAKE_RESERVATION
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_MAKE_RESERVATION" (pin_client_id in number, pin_vechicle_id in number, 
+                                                pin_base_price_id in number, pis_reservation_date in varchar2) as
+ln_is_vechicle number := 0;
+ln_is_vechicle_available number := 0;
+ln_is_client number := 0;
+ln_is_base_price number := 0;
+ln_reservation_duration number := 0;
+begin
+    select count(*) into ln_is_vechicle from vechicles where vechicle_id = pin_vechicle_id;
+    select count(*) into ln_is_client from clients where client_id = pin_client_id;
+    select count(*) into ln_is_base_price from base_prices where base_price_id = pin_base_price_id;
+    select availability into ln_is_vechicle_available from vechicles where vechicle_id = pin_vechicle_id;
+    if ln_is_base_price = 0 then
+        DBMS_OUTPUT.PUT_LINE('given base_price record not exist');
+    elsif ln_is_client = 0 then
+        DBMS_OUTPUT.PUT_LINE('given client record not exist');
+    elsif ln_is_vechicle = 0 then
+        DBMS_OUTPUT.PUT_LINE('given vechicle record not exist');
+    elsif ln_is_vechicle_available = 0 then
+        DBMS_OUTPUT.PUT_LINE('given vechicle not available');
+    else
+        select number_of_days into ln_reservation_duration from base_prices where base_price_id = pin_base_price_id;
+        begin
+            INSERT into reservations (reservation_id, client_id, vechicle_id, base_price_id, reservation_date, 
+                        expected_retrive_date) 
+            values (null, pin_client_id, pin_vechicle_id, pin_base_price_id, to_date(pis_reservation_date, 'dd/mm/yyyy'), 
+                    to_date(pis_reservation_date, 'dd/mm/yyyy')+ln_reservation_duration);
+            update vechicles set availability = 0 where vechicle_id = pin_vechicle_id;
+            commit;
+            DBMS_OUTPUT.PUT_LINE('Reservaiton successfuly placed');
+        exception when others then
+            rollback;
+            DBMS_OUTPUT.put_line('error during inserting data ');
+        end;
+    end if;
+exception when others then
+    DBMS_OUTPUT.PUT_LINE('Error('||sqlcode||')-'||sqlerrm);
+end;
+
+/
+
+  GRANT EXECUTE ON "ADMIN_RENTALCAR"."P_MAKE_RESERVATION" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for Procedure P_REFRESH_LATE_RESERVATIONS
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_REFRESH_LATE_RESERVATIONS" as
+begin
+DBMS_mview.refresh('admin_rentalcar.mv_late_reservations', 'f');
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure P_RETRIVE_RESERVATION
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_RETRIVE_RESERVATION" (pid_reservation_id in number) as
+ld_ret_date date;
+ln_is_res_exist number;
+ln_vechicle_id number;
+begin
+select count(*) into ln_is_res_exist from reservations where reservation_id = pid_reservation_id;
+    if ln_is_res_exist = 1 then
+        select actual_retrive_date, vechicle_id into ld_ret_date, ln_vechicle_id from reservations where reservation_id = pid_reservation_id;
+        if ld_ret_date is null  then
+            begin
+                update reservations set actual_retrive_date = to_date(sysdate, 'dd/mm/yyyy')
+                    where reservation_id = pid_reservation_id;
+                update vechicles set availability = 1 where vechicle_id = ln_vechicle_id;
+                commit;
+                DBMS_OUTPUT.PUT_LINE('Reservation successfuly retrived');
+            exception when others then
+                DBMS_OUTPUT.PUT_LINE('Transaction failed');
+            end;
+        else
+            DBMS_OUTPUT.PUT_LINE('Reservation already retrived');
+        end if;
+    else
+        DBMS_OUTPUT.PUT_LINE('Reservation not exist');
+    end if;
+exception when others then
+    DBMS_OUTPUT.PUT_LINE('Error('||sqlcode||')-'||sqlerrm);
+end;
+
+/
+
+  GRANT EXECUTE ON "ADMIN_RENTALCAR"."P_RETRIVE_RESERVATION" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for Procedure P_SHOW_INFORMATIONS_ABOUT_RESERVATION
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_SHOW_INFORMATIONS_ABOUT_RESERVATION" (pin_reservation_id IN number) as
+type type_res_info is record ( 
+    res_id reservations.reservation_id%type,
+    f_name clients.first_name%type,
+    l_name clients.last_name%type,
+    v_man vechicles.manufacturer%type,
+    v_mod vechicles.model%type,
+    res_date reservations.reservation_date%type,
+    e_ret_dat reservations.expected_retrive_date%type,
+    sum number
+);
+l_res_info type_res_info;
+begin
+select r.reservation_id, c.first_name, c.last_name, 
+       v.manufacturer, v.model, 
+       r.reservation_date, r.expected_retrive_date,
+       f_sumup_reservation(b.price, b.number_of_days) "SUM"
+       into l_res_info
+from reservations r, vechicles v, clients c, base_prices b
+where r.vechicle_id = v.vechicle_id
+  and c.client_id = r.client_id
+  and b.base_price_id = r.base_price_id
+  and r.reservation_id = pin_reservation_id;
+  
+DBMS_OUTPUT.put_line('CLIENT:');
+DBMS_OUTPUT.PUT_LINE(l_res_info.f_name||' '||l_res_info.l_name);
+DBMS_OUTPUT.PUT_LINE('VECHICLE:');
+DBMS_OUTPUT.PUT_LINE(l_res_info.v_man||' '||l_res_info.v_mod);
+DBMS_OUTPUT.PUT_LINE('START AND END OF RESERVATION:');
+DBMS_OUTPUT.PUT_LINE(l_res_info.res_date||' - '||l_res_info.e_ret_dat);
+DBMS_OUTPUT.PUT_LINE('TOTAL SUM TO PAY: '||l_res_info.sum);
+exception when no_data_found then
+    DBMS_OUTPUT.PUT_LINE('Reservation with given id does not exist'); 
+          when others then
+    DBMS_OUTPUT.PUT_LINE('Error('||sqlcode||')-'||sqlerrm);
+end;
+
+/
+
+  GRANT EXECUTE ON "ADMIN_RENTALCAR"."P_SHOW_INFORMATIONS_ABOUT_RESERVATION" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for Procedure P_VECHICLES_IN_LOCATION
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN_RENTALCAR"."P_VECHICLES_IN_LOCATION" (pin_location_id in number) as
+    vechicle_type vechicles%rowtype;
+    lb_is_empty boolean default true;
+    cursor c_vechicles_in_locations(loc_id number) is
+        select * 
+        from vechicles
+        where location_id = loc_id;
+begin
+    for i in c_vechicles_in_locations(pin_location_id) loop
+        lb_is_empty := false;
+        DBMS_OUTPUT.PUT_LINE(i.vechicle_id||' '||
+                             i.manufacturer||' '||
+                             i.model||' '||
+                             i.color||' '||
+                             i.engine||' '||
+                             i.power_kv||' '||
+                             i.price_multiplier||' '||
+                             i.availability);
+    end loop;
+    if lb_is_empty then
+        DBMS_OUTPUT.PUT_LINE('not found any data');
+    end if;
+end;
+
+/
+
+  GRANT EXECUTE ON "ADMIN_RENTALCAR"."P_VECHICLES_IN_LOCATION" TO "R_RENTALCAR_WORKERS";
+--------------------------------------------------------
+--  DDL for Function F_SUMUP_RESERVATION
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE FUNCTION "ADMIN_RENTALCAR"."F_SUMUP_RESERVATION" (price number, price_multiplier number) return number as
+begin
+return price*price_multiplier;
+exception when others then
+    DBMS_OUTPUT.PUT_LINE('Wrong input data in f_sumup_reservation');
+end;
+
+/
+--------------------------------------------------------
+--  Constraints for Table LOCATIONS
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."LOCATIONS" MODIFY ("CITY" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."LOCATIONS" MODIFY ("ADDRESS" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."LOCATIONS" ADD CONSTRAINT "LOCATIONS_PK" PRIMARY KEY ("LOCATION_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table VECHICLES
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("MANUFACTURER" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("MODEL" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("COLOR" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("ENGINE" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("POWER_KV" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("PRICE_MULTIPLIER" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" MODIFY ("LOCATION_ID" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" ADD CONSTRAINT "VECHICLES_PK" PRIMARY KEY ("VECHICLE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table RESERVATIONS
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" MODIFY ("CLIENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" MODIFY ("VECHICLE_ID" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" MODIFY ("BASE_PRICE_ID" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" MODIFY ("RESERVATION_DATE" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" ADD CONSTRAINT "RESERVATIONS_PK" PRIMARY KEY ("RESERVATION_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" ADD CONSTRAINT "RESERVATIONS_CHECK_DATE" CHECK (Reservation_Date<Expected_Retrive_Date) ENABLE;
+--------------------------------------------------------
+--  Constraints for Table ADMIN_LOGS
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."ADMIN_LOGS" ADD CONSTRAINT "ADMIN_LOGS_PK" PRIMARY KEY ("LOG_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table CLIENTS
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" MODIFY ("FIRST_NAME" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" MODIFY ("LAST_NAME" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" MODIFY ("PHONE" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" MODIFY ("CITY" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" MODIFY ("ADDRESS" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" ADD CONSTRAINT "CLIENTS_CHECK_IF_FIRST_NAME_CONTAINS_ONLY_LETTERS" CHECK (REGEXP_LIKE(first_Name, '^[A-Za-z]+$')) ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" ADD CONSTRAINT "CLIENTS_CHECK_IF_LAST_NAME_CONTAINS_ONLY_LETTERS" CHECK (REGEXP_LIKE(Last_Name, '^[A-Za-z]+$')) ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."CLIENTS" ADD CONSTRAINT "CLIENTS_PK" PRIMARY KEY ("CLIENT_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table BASE_PRICES
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."BASE_PRICES" MODIFY ("NUMBER_OF_DAYS" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."BASE_PRICES" MODIFY ("PRICE" NOT NULL ENABLE);
+  ALTER TABLE "ADMIN_RENTALCAR"."BASE_PRICES" ADD CONSTRAINT "BASE_PRICES_PK" PRIMARY KEY ("BASE_PRICE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."BASE_PRICES" ADD CONSTRAINT "BASE_PRICES_CHECK_IF_NUMBER_OF_DAYS_IS_POSITIVE" CHECK (Number_Of_Days>0) ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."BASE_PRICES" ADD CONSTRAINT "BASE_PRICES_CHECK_IF_PRICE_IS_POSITIVE" CHECK (Price>0) ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table RESERVATIONS
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" ADD CONSTRAINT "RESERVATIONS_CLIENTS_REL" FOREIGN KEY ("CLIENT_ID")
+	  REFERENCES "ADMIN_RENTALCAR"."CLIENTS" ("CLIENT_ID") ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" ADD CONSTRAINT "RESERVATIONS_VECHICLES_REL" FOREIGN KEY ("VECHICLE_ID")
+	  REFERENCES "ADMIN_RENTALCAR"."VECHICLES" ("VECHICLE_ID") ENABLE;
+  ALTER TABLE "ADMIN_RENTALCAR"."RESERVATIONS" ADD CONSTRAINT "RESERVATIONS_BASE_PRICES_REL" FOREIGN KEY ("BASE_PRICE_ID")
+	  REFERENCES "ADMIN_RENTALCAR"."BASE_PRICES" ("BASE_PRICE_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table VECHICLES
+--------------------------------------------------------
+
+  ALTER TABLE "ADMIN_RENTALCAR"."VECHICLES" ADD CONSTRAINT "VECHICLES_LOCATIONS_REL" FOREIGN KEY ("LOCATION_ID")
+	  REFERENCES "ADMIN_RENTALCAR"."LOCATIONS" ("LOCATION_ID") ENABLE;
